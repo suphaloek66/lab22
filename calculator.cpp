@@ -2,8 +2,31 @@
 
 /* This is where all the input to the window goes to */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
+	char TextSaved[20];
+	HWND textfield,Textbox,button1,button2,button3,button4;
 	switch(Message) {
-		
+		case WM_CREATE:
+			textfield = CreateWindow("STATIC","Plese input two numbers",WS_VISIBLE | WS_CHILD | WS_BORDER ,20 ,20 ,200 ,25 ,hwnd ,NULL ,NULL ,NULL);
+			Textbox = CreateWindow("EDIT","",WS_VISIBLE | WS_CHILD | WS_BORDER ,20 ,50 ,200 ,25 ,hwnd ,NULL ,NULL ,NULL);
+			Textbox = CreateWindow("EDIT","",WS_VISIBLE | WS_CHILD | WS_BORDER ,20 ,80 ,200 ,25 ,hwnd ,NULL ,NULL ,NULL);
+			button1 = CreateWindow("Button","+",WS_VISIBLE | WS_CHILD | WS_BORDER ,25 ,120 ,40 ,25 ,hwnd ,(HMENU) 1 ,NULL ,NULL);
+			button2 = CreateWindow("Button","-",WS_VISIBLE | WS_CHILD | WS_BORDER ,70 ,120 ,40 ,25 ,hwnd ,(HMENU) 2 ,NULL ,NULL);
+			button3 = CreateWindow("Button","*",WS_VISIBLE | WS_CHILD | WS_BORDER ,115 ,120 ,40 ,25 ,hwnd ,(HMENU) 3 ,NULL ,NULL);
+			button4 = CreateWindow("Button","/",WS_VISIBLE | WS_CHILD | WS_BORDER ,160 ,120 ,40 ,25 ,hwnd ,(HMENU) 4 ,NULL ,NULL);
+			break;
+
+		case WM_COMMAND:
+			switch (LOWORD(wParam))
+			{
+			case 1:
+				double x;
+				char *T = &TextSaved[0];
+				int gwtstat = 0;
+				gwtstat = GetWindowText(Textbox,T,20);
+				MessageBox(NULL,TextSaved, TextSaved, MB_OK);
+				break;
+				}
+			break;
 		/* Upon destruction, tell the main thread to stop */
 		case WM_DESTROY: {
 			PostQuitMessage(0);
@@ -41,11 +64,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 	}
 
-	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,"WindowClass","Caption",WS_VISIBLE|WS_OVERLAPPEDWINDOW,
+	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,"WindowClass","My Calculator",WS_VISIBLE|WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT, /* x */
 		CW_USEDEFAULT, /* y */
-		640, /* width */
-		480, /* height */
+		250, /* width */
+		200, /* height */
 		NULL,NULL,hInstance,NULL);
 
 	if(hwnd == NULL) {
