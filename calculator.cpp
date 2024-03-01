@@ -1,14 +1,22 @@
 #include <windows.h>
+#include <stdio.h>
 
+LRESULT CALLBACK WndProc (HWND,UINT,WPARAM,LPARAM);
+ char Text1[20];
+ char Text2[20];
+ char t[100];
+ float value;
+ int gwtstat1 =0,gwtstat2 =0;
+HBRUSH hBrushCustomBg;
+	HWND textfield,Textbox1,TextBox2,button1,button2,button3,button4;
 /* This is where all the input to the window goes to */
 LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) {
-	char TextSaved[20];
-	HWND textfield,Textbox,button1,button2,button3,button4;
+	
 	switch(Message) {
 		case WM_CREATE:
 			textfield = CreateWindow("STATIC","Plese input two numbers",WS_VISIBLE | WS_CHILD | WS_BORDER ,20 ,20 ,200 ,25 ,hwnd ,NULL ,NULL ,NULL);
-			Textbox = CreateWindow("EDIT","",WS_VISIBLE | WS_CHILD | WS_BORDER ,20 ,50 ,200 ,25 ,hwnd ,NULL ,NULL ,NULL);
-			Textbox = CreateWindow("EDIT","",WS_VISIBLE | WS_CHILD | WS_BORDER ,20 ,80 ,200 ,25 ,hwnd ,NULL ,NULL ,NULL);
+			Textbox1 = CreateWindow("EDIT","",WS_VISIBLE | WS_CHILD | WS_BORDER ,20 ,50 ,200 ,25 ,hwnd ,NULL ,NULL ,NULL);
+			TextBox2 = CreateWindow("EDIT","",WS_VISIBLE | WS_CHILD | WS_BORDER ,20 ,80 ,200 ,25 ,hwnd ,NULL ,NULL ,NULL);
 			button1 = CreateWindow("Button","+",WS_VISIBLE | WS_CHILD | WS_BORDER ,25 ,120 ,40 ,25 ,hwnd ,(HMENU) 1 ,NULL ,NULL);
 			button2 = CreateWindow("Button","-",WS_VISIBLE | WS_CHILD | WS_BORDER ,70 ,120 ,40 ,25 ,hwnd ,(HMENU) 2 ,NULL ,NULL);
 			button3 = CreateWindow("Button","*",WS_VISIBLE | WS_CHILD | WS_BORDER ,115 ,120 ,40 ,25 ,hwnd ,(HMENU) 3 ,NULL ,NULL);
@@ -19,15 +27,35 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT Message, WPARAM wParam, LPARAM lParam) 
 			switch (LOWORD(wParam))
 			{
 			case 1:
-				double x;
-				char *T = &TextSaved[0];
-				int gwtstat = 0;
-				gwtstat = GetWindowText(Textbox,T,20);
-				MessageBox(NULL,TextSaved, TextSaved, MB_OK);
-				break;
+					gwtstat1 = GetWindowText(Textbox1,&Text1[0],20);
+					gwtstat2 = GetWindowText(TextBox2,&Text2[0],20);
+					value=atof(Text1)+atof(Text2);
+					sprintf(t, "%f", value);
+					:: MessageBox(hwnd,t,"Result",MB_OK);
+					break;
+			case 2:
+					gwtstat1 = GetWindowText(Textbox1,&Text1[0],20);
+					gwtstat2 = GetWindowText(TextBox2,&Text2[0],20);
+					value=atof(Text1)-atof(Text2);
+					sprintf(t, "%f", value);
+					:: MessageBox(hwnd,t,"Result",MB_OK);
+					break;
+				case 3:
+					gwtstat1 = GetWindowText(Textbox1,&Text1[0],20);
+					gwtstat2 = GetWindowText(TextBox2,&Text2[0],20);
+					value=atof(Text1)*atof(Text2);
+					sprintf(t, "%f", value);
+					:: MessageBox(hwnd,t,"Result",MB_OK);
+					break;
+				case 4:
+					gwtstat1 = GetWindowText(Textbox1,&Text1[0],20);
+					gwtstat2 = GetWindowText(TextBox2,&Text2[0],20);
+					value=atof(Text1)/atof(Text2);
+					sprintf(t, "%f", value);
+					:: MessageBox(hwnd,t,"Result",MB_OK);
+					break;
 				}
 			break;
-		/* Upon destruction, tell the main thread to stop */
 		case WM_DESTROY: {
 			PostQuitMessage(0);
 			break;
@@ -54,7 +82,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	wc.hCursor	 = LoadCursor(NULL, IDC_ARROW);
 	
 	/* White, COLOR_WINDOW is just a #define for a system color, try Ctrl+Clicking it */
-	wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+	wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(6, 6, 208));
 	wc.lpszClassName = "WindowClass";
 	wc.hIcon	 = LoadIcon(NULL, IDI_APPLICATION); /* Load a standard icon */
 	wc.hIconSm	 = LoadIcon(NULL, IDI_APPLICATION); /* use the name "A" to use the project icon */
@@ -64,7 +92,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		return 0;
 	}
 
-	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,"WindowClass","My Calculator",WS_VISIBLE|WS_OVERLAPPEDWINDOW,
+	hwnd = CreateWindowEx(WS_EX_CLIENTEDGE,"WindowClass","My Calculator",WS_VISIBLE|WS_SYSMENU,
 		CW_USEDEFAULT, /* x */
 		CW_USEDEFAULT, /* y */
 		250, /* width */
